@@ -22,6 +22,11 @@ set(dependencies
 add_executable(nav_action_proxy_node src/nav_action_proxy_node.cpp)
 ament_target_dependencies(nav_action_proxy_node ${dependencies})
 
+if(BUILD_TESTING)
+  find_package(ament_lint_auto REQUIRED)
+  find_package(ament_lint_common REQUIRED)
+  ament_lint_auto_find_test_dependencies()
+endif()
 
 install(TARGETS
   nav_action_proxy_node

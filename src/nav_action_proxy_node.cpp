@@ -25,9 +25,7 @@ using std::placeholders::_2;
 
 ActionProxy::ActionProxy()
 : Node("metacontrol_navigate_to_pose_proxy")
-{
-
-}
+{}
 
 void ActionProxy::start_server()
 {
@@ -71,7 +69,6 @@ void ActionProxy::send_nav_action(NavigateToPose::Goal goal)
   } while (!is_action_server_ready);
 
   RCLCPP_INFO(get_logger(), "Navigation action server ready");
-  
   auto send_goal_options =
     rclcpp_action::Client<NavigateToPose>::SendGoalOptions();
 
@@ -90,22 +87,22 @@ void ActionProxy::send_nav_action(NavigateToPose::Goal goal)
   if (!client_nav_goal_handle_) {
     RCLCPP_ERROR(get_logger(), "Goal was rejected by server");
   }
-}  
+}
 
 void ActionProxy::execute(const std::shared_ptr<ServerNavGoalHandle> goal_handle)
 {
   rclcpp::Rate loop_rate(2);
-  send_nav_action(current_goal_); // send the goal to nav2
+  send_nav_action(current_goal_);  // send the goal to nav2
 
-  // Check the status and return to metacontroller
+  //  Check the status and return to metacontroller
   auto result = std::make_shared<NavigateToPose::Result>();
-  while (rclcpp::ok())
-  {
+  while (rclcpp::ok()) {
     switch (nav_result_.code) {
       case rclcpp_action::ResultCode::SUCCEEDED:
         RCLCPP_INFO(this->get_logger(), "Action Succeeded");
-        if (goal_handle->is_executing())
+        if (goal_handle->is_executing()) {
           goal_handle->succeed(result);
+        }
         nav_result_.code = rclcpp_action::ResultCode::UNKNOWN;
         break;
       case rclcpp_action::ResultCode::ABORTED:
@@ -121,7 +118,7 @@ void ActionProxy::execute(const std::shared_ptr<ServerNavGoalHandle> goal_handle
         RCLCPP_DEBUG(get_logger(), "Unknown result code");
         break;
     }
-    loop_rate.sleep();  
+    loop_rate.sleep();
   }
 }
 
@@ -145,7 +142,7 @@ void ActionProxy::handle_accepted(const std::shared_ptr<ServerNavGoalHandle> goa
 
 }  // namespace metacontrol_tooling
 
-int main(int argc, char **argv)
+int main(int argc, char ** argv)
 {
   rclcpp::init(argc, argv);
   auto node = std::make_shared<metacontrol_tooling::ActionProxy>();

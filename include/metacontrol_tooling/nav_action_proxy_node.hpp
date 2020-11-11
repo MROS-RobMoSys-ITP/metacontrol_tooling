@@ -28,7 +28,6 @@ namespace metacontrol_tooling
 class ActionProxy : public rclcpp::Node
 {
 public:
-
   using NavigateToPose = nav2_msgs::action::NavigateToPose;
   using ServerNavGoalHandle = rclcpp_action::ServerGoalHandle<NavigateToPose>;
   using ClientNavGoalHandle = rclcpp_action::ClientGoalHandle<NavigateToPose>;
@@ -61,7 +60,6 @@ private:
   void handle_accepted(const std::shared_ptr<ServerNavGoalHandle> goal_handle);
 
   void send_nav_action(NavigateToPose::Goal goal);
-
 };
 
 }  // namespace metacontrol_tooling
