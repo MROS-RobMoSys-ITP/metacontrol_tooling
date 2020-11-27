@@ -1,0 +1,86 @@
+SkillDefinitionSet{
+	
+	Skill to_navigate {
+		quality attributes [safety, performance] //accuracy
+		input{DistanceToWall:float} 
+		result{
+			success: "OK",
+			error: "InternalError",
+			inprogress: "IN_PROGRESS" //ROS2 action reports
+		}
+		
+		Realization _DEFAULT_mode{
+			Component amcl {Configuration inactive},
+			Component bt_navigator {Configuration inactive},
+			Component controller_server {Configuration inactive},
+			Component pointcloud_to_laser {Configuration inactive},
+			Component laser_resender {Configuration inactive}
+			Quality[safety:3.0,performance:5.0, energy: 0.45]; 
+			context: Default	
+			
+		};
+		Realization f_normal_mode {
+			Component amcl {Configuration active.DEFAULT{transform_tolerance: 0.2, alpha1: 0.2, alpha2: 0.2, alpha3: 0.2, alpha4: 0.2, alpha5: 0.2}},
+			Component bt_navigator {Configuration active.DEFAULT{default_bt_xml_filename: "navigate_w_replanning_and_recovery.xml"}},
+			Component controller_server {Configuration active.DEFAULT{FollowPath.max_vel_x: 0.4, FollowPath.max_speed_xy: 0.4, FollowPath.max_vel_theta: 1.25, FollowPath.transform_tolerance: 0.2}},
+			Component pointcloud_to_laser {Configuration inactive},
+			Component laser_resender {Configuration active.DEFAULT{node_name: "laser_resender"}}
+			Quality[safety:3.0,performance:4.0, energy: 0.2]; 
+			context: Default	
+			
+		};
+		
+		Realization f_degraded_mode {
+			Component amcl {
+				Configuration active.DEGRADED {transofrm_tolerance: 2.5, alpha1: 0.05, alpha2: 0.05, alpha3: 0.05, 
+					alpha4: 0.06, alpha5: 0.055}
+			},
+		    Component bt_navigator {Configuration active.DEFAULT{default_bt_xml_filename: "navigate_w_replanning_and_recovery.xml"}},
+			Component controller_server {Configuration active.DEGRADED{FollowPath.max_vel_x: 0.1, FollowPath.max_speed_xy: 0.1, FollowPath.max_vel_theta: 0.5, FollowPath.transform_tolerance: 2.5}},
+			Component pointcloud_to_laser {Configuration active.DEFAULT{node_name: "pointcloud_to_laser"}},
+			Component laser_resender {Configuration unconfigured}
+			Quality[energy: 0.45, performance: 0.2, safety:0.55 ]; 
+			context: Default	
+			
+		};
+		Realization f_performance_mode {
+		    Component amcl {Configuration active.DEFAULT{transform_tolerance: 0.2, alpha1: 0.2, alpha2: 0.2, alpha3: 0.2, alpha4: 0.2, alpha5: 0.2}},
+			Component bt_navigator {Configuration active.SIMPLE{default_bt_xml_filename:"navigate_w_replanning.xml"}},
+			Component controller_server {Configuration active.FAST {FollowPath.max_vel_x: 0.5, FollowPath.max_speed_xy: 0.5, FollowPath.max_vel_theta: 1.5, FollowPath.transform_tolerance: 0.2}},
+			Component pointcloud_to_laser {Configuration inactive},
+			Component laser_resender {Configuration active.DEFAULT{node_name: "laser_resender"}}
+			Quality[safety:3.0,performance:5.0]; 
+			context: Default	
+			
+		};
+		Realization f_energy_saving_mode {
+			Component amcl {Configuration active.DEFAULT{transform_tolerance: 0.2, alpha1: 0.2, alpha2: 0.2, alpha3: 0.2, alpha4: 0.2, alpha5: 0.2}},
+			Component bt_navigator {Configuration active.LOW_BATTERY{default_bt_xml_filename:"navigate_w_replanning.xml"}},
+			Component controller_server {Configuration active.SLOW {FollowPath.max_vel_x: 0.1, FollowPath.max_speed_xy: 0.1, FollowPath.max_vel_theta: 0.5, FollowPath.transform_tolerance: 0.2}},
+			Component pointcloud_to_laser {Configuration inactive},
+			Component laser_resender {Configuration active.DEFAULT{node_name: "laser_resender"}}
+			Quality[safety:3.0,performance:5.0]; 
+			context: Default	
+			
+		};
+		
+		Realization f_slow_mode {
+			Component amcl {Configuration active.DEFAULT{transform_tolerance: 0.2, alpha1: 0.2, alpha2: 0.2, alpha3: 0.2, alpha4: 0.2, alpha5: 0.2}},
+			Component bt_navigator {Configuration active.DEFAULT{default_bt_xml_filename: "navigate_w_replanning_and_recovery.xml"}},
+			Component controller_server {Configuration active.SLOW {FollowPath.max_vel_x: 0.1, FollowPath.max_speed_xy: 0.1, FollowPath.max_vel_theta: 0.5, FollowPath.transform_tolerance: 0.2}},
+			Component pointcloud_to_laser {Configuration inactive},
+			Component laser_resender {Configuration active.DEFAULT{node_name: "laser_resender"}}
+			Quality[safety:3.0,performance:4.0]; 
+			context: Default	
+			
+		};
+	
+	}
+	
+		
+}
+
+
+
+
+
