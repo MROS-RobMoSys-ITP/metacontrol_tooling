@@ -1,0 +1,156 @@
+pilot:
+  ros__parameters:
+    type: system
+    parts:    
+    	amcl
+    	bt_navigator
+    	controller_server
+    	pointcloud_to_laser
+    	laser_resender
+    		
+    modes:
+    	_DEFAULT_mode: 
+    		amcl:  inactive 
+    		bt_navigator:  inactive 
+    		controller_server:  inactive 
+    		pointcloud_to_laser:  inactive 
+    		laser_resender:  inactive 
+    	f_normal_mode: 
+    		amcl:  active.DEFAULT 
+    		bt_navigator:  active.DEFAULT 
+    		controller_server:  active.DEFAULT 
+    		pointcloud_to_laser:  inactive 
+    		laser_resender:  active.DEFAULT 
+    	f_degraded_mode: 
+    		amcl:  active.DEGRADED 
+    		bt_navigator:  active.DEFAULT 
+    		controller_server:  active.DEGRADED 
+    		pointcloud_to_laser:  active.DEFAULT 
+    		laser_resender:  unconfigured 
+    	f_performance_mode: 
+    		amcl:  active.DEFAULT 
+    		bt_navigator:  active.SIMPLE 
+    		controller_server:  active.FAST 
+    		pointcloud_to_laser:  inactive 
+    		laser_resender:  active.DEFAULT 
+    	f_energy_saving_mode: 
+    		amcl:  active.DEFAULT 
+    		bt_navigator:  active.LOW_BATTERY 
+    		controller_server:  active.SLOW 
+    		pointcloud_to_laser:  inactive 
+    		laser_resender:  active.DEFAULT 
+    	f_slow_mode: 
+    		amcl:  active.DEFAULT 
+    		bt_navigator:  active.DEFAULT 
+    		controller_server:  active.SLOW 
+    		pointcloud_to_laser:  inactive 
+    		laser_resender:  active.DEFAULT 
+amcl:
+             ros_parameters:
+             	type: node
+             	modes:
+             		
+                    
+             		
+             				DEFAULT:
+             				ros_parameters:  
+             				transform_tolerance:0.2
+             				alpha1:0.2
+             				alpha2:0.2
+             				alpha3:0.2
+             				alpha4:0.2
+             				alpha5:0.2
+                    
+             		
+             				DEGRADED:
+             				ros_parameters:  
+             				transofrm_tolerance:2.5
+             				alpha1:0.05
+             				alpha2:0.05
+             				alpha3:0.05
+             				alpha4:0.06
+             				alpha5:0.05
+                    
+bt_navigator:
+             ros_parameters:
+             	type: node
+             	modes:
+             		
+                    
+             		
+             				DEFAULT:
+             				ros_parameters:  
+             				default_bt_xml_filename:navigate_w_replanning_and_recovery.xml
+                    
+             		
+             				SIMPLE:
+             				ros_parameters:  
+             				default_bt_xml_filename:navigate_w_replanning.xml
+                    
+             		
+             				LOW_BATTERY:
+             				ros_parameters:  
+             				default_bt_xml_filename:navigate_w_replanning.xml
+                    
+controller_server:
+             ros_parameters:
+             	type: node
+             	modes:
+             		
+                    
+             		
+             				DEFAULT:
+             				ros_parameters:  
+             				FollowPath.max_vel_x:0.4
+             				FollowPath.max_speed_xy:0.4
+             				FollowPath.max_vel_theta:1.25
+             				FollowPath.transform_tolerance:0.2
+                    
+             		
+             				DEGRADED:
+             				ros_parameters:  
+             				FollowPath.max_vel_x:0.1
+             				FollowPath.max_speed_xy:0.1
+             				FollowPath.max_vel_theta:0.5
+             				FollowPath.transform_tolerance:2.5
+                    
+             		
+             				FAST:
+             				ros_parameters:  
+             				FollowPath.max_vel_x:0.5
+             				FollowPath.max_speed_xy:0.5
+             				FollowPath.max_vel_theta:1.5
+             				FollowPath.transform_tolerance:0.2
+                    
+             		
+             				SLOW:
+             				ros_parameters:  
+             				FollowPath.max_vel_x:0.1
+             				FollowPath.max_speed_xy:0.1
+             				FollowPath.max_vel_theta:0.5
+             				FollowPath.transform_tolerance:0.2
+                    
+pointcloud_to_laser:
+             ros_parameters:
+             	type: node
+             	modes:
+             		
+                    
+             		
+             				DEFAULT:
+             				ros_parameters:  
+             				node_name:pointcloud_to_laser
+                    
+laser_resender:
+             ros_parameters:
+             	type: node
+             	modes:
+             		
+                    
+             		
+             				DEFAULT:
+             				ros_parameters:  
+             				node_name:laser_resender
+                    
+             		
+                    

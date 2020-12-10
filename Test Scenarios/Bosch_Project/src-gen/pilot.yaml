@@ -1,0 +1,95 @@
+pilot:
+  ros__parameters:
+    type: system
+    parts:    
+    	lidar
+    	wall_sensor
+    	odometry
+    	drop_sensor
+    		
+    modes:
+    	_DEFAULT_mode: 
+    		lidar:  active._DEFAULT_mode 
+    		wall_sensor:  active._DEFAULT_mode 
+    		odometry:  active._Default_mode 
+    		drop_sensor:  active._Default_mode 
+    	f_normal_mode: 
+    		lidar:  active._DEFAULT_mode 
+    		wall_sensor:  active._DEFAULT_mode 
+    		odometry:  active._Default_mode 
+    		drop_sensor:  active._Default_mode 
+    	f_degraded_mode: 
+    		lidar:  active._DEFAULT_mode 
+    		wall_sensor:  unconfigured 
+    		odometry:  active._Default_mode 
+    		drop_sensor:  active._Default_mode 
+    	_DEFAULT_mode: 
+    		lidar:  active._DEFAULT_mode 
+    		wall_sensor:  active._DEFAULT_mode 
+    		odometry:  active._Default_mode 
+    		drop_sensor:  active._Default_mode 
+    	f_normal_mode: 
+    		lidar:  active._DEFAULT_mode 
+    		wall_sensor:  active._DEFAULT_mode 
+    		odometry:  active._Default_mode 
+    		drop_sensor:  active._Default_mode 
+    	f_degraded_mode: 
+    		lidar:  active._DEFAULT_mode 
+    		wall_sensor:  unconfigured 
+    		odometry:  active._Default_mode 
+    		drop_sensor:  active._Default_mode 
+    	_DEFAULT_mode: 
+    		lidar:  active._DEFAULT_mode 
+    		wall_sensor:  active._DEFAULT_mode 
+    		odometry:  active._Default_mode 
+    		drop_sensor:  active._Default_mode 
+    	f_normal_mode: 
+    		lidar:  active._DEFAULT_mode 
+    		wall_sensor:  active._DEFAULT_mode 
+    		odometry:  active._Default_mode 
+    		drop_sensor:  active._Default_mode 
+    	f_degraded_mode: 
+    		lidar:  active._DEFAULT_mode 
+    		wall_sensor:  unconfigured 
+    		odometry:  active._Default_mode 
+    		drop_sensor:  active._Default_mode 
+lidar:
+             ros_parameters:
+             	type: node
+             	modes:
+             		
+             				_DEFAULT_mode:
+             				ros_parameters:  
+             				lidar_fallback:0
+             				target_speed:0.15
+             				target_distance_to_wall:0.07
+                    
+wall_sensor:
+             ros_parameters:
+             	type: node
+             	modes:
+             		
+             				_DEFAULT_mode:
+             				ros_parameters:  
+             				mode:default
+                    
+             		
+                    
+odometry:
+             ros_parameters:
+             	type: node
+             	modes:
+             		
+             				_Default_mode:
+             				ros_parameters:  
+             				mode:default
+                    
+drop_sensor:
+             ros_parameters:
+             	type: node
+             	modes:
+             		
+             				_Default_mode:
+             				ros_parameters:  
+             				mode:default
+                    

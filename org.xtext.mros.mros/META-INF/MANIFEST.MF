@@ -1,0 +1,29 @@
+Manifest-Version: 1.0
+Automatic-Module-Name: org.xtext.mros.mros
+Bundle-ManifestVersion: 2
+Bundle-Name: org.xtext.mros.mros
+Bundle-Vendor: My Company
+Bundle-Version: 1.0.0.qualifier
+Bundle-SymbolicName: org.xtext.mros.mros; singleton:=true
+Bundle-ActivationPolicy: lazy
+Require-Bundle: org.eclipse.xtext,
+ org.eclipse.xtext.xbase,
+ org.eclipse.equinox.common;bundle-version="3.5.0",
+ org.eclipse.emf.ecore,
+ org.eclipse.xtext.xbase.lib;bundle-version="2.14.0",
+ org.eclipse.xtext.util,
+ org.eclipse.emf.common,
+ org.antlr.runtime;bundle-version="[3.2.0,3.2.1)"
+Bundle-RequiredExecutionEnvironment: JavaSE-11
+Export-Package: org.xtext.mros.mros.services,
+ org.xtext.mros.mros.parser.antlr.internal,
+ org.xtext.mros.mros,
+ org.xtext.mros.mros.mROS.impl,
+ org.xtext.mros.mros.validation,
+ org.xtext.mros.mros.scoping,
+ org.xtext.mros.mros.generator,
+ org.xtext.mros.mros.mROS,
+ org.xtext.mros.mros.mROS.util,
+ org.xtext.mros.mros.serializer,
+ org.xtext.mros.mros.parser.antlr
+Import-Package: org.apache.log4j

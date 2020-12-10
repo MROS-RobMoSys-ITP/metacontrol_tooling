@@ -1,0 +1,173 @@
+SkillDefinitionSet{
+	
+	Skill to_navigate {
+		quality attributes [safety, performance, energy] //accuracy
+		input{DistanceToWall:float} 
+		result{
+			success: "OK",
+			error: "InternalError",
+			inprogress: "IN_PROGRESS" //ROS2 action reports
+		}
+		
+		Realization _DEFAULT_mode{
+			Component amcl {Configuration inactive},
+			Component bt_navigator {Configuration inactive},
+			Component controller_server {Configuration inactive},
+			Component pointcloud_to_laser {Configuration inactive},
+			Component laser_resender observable {Configuration inactive}
+			Quality[energy: 0.5, safety:0.8,performance:0.7]; 
+			context: Default	
+			
+		};
+		Realization f_normal_mode {
+			Component amcl {Configuration active.DEFAULT{transform_tolerance: 0.2, alpha1: 0.2, alpha2: 0.2, alpha3: 0.2, alpha4: 0.2, alpha5: 0.2}},
+			Component bt_navigator {Configuration active.DEFAULT{default_bt_xml_filename: "navigate_w_replanning_and_recovery.xml"}},
+			Component controller_server {Configuration active.DEFAULT{FollowPath.max_vel_x: 0.4, FollowPath.max_speed_xy: 0.4, FollowPath.max_vel_theta: 1.25, FollowPath.transform_tolerance: 0.2}},
+			Component pointcloud_to_laser {Configuration inactive},
+			Component laser_resender  observable  {Configuration active.DEFAULT{node_name: "laser_resender"}}
+			Quality[energy: 0.5, safety:0.8,performance:0.7, energy: 0.2]; 
+			context: Default	
+			
+		};
+		
+		Realization f_degraded_mode {
+			Component amcl {
+				Configuration active.DEGRADED {transofrm_tolerance: 2.5, alpha1: 0.05, alpha2: 0.05, alpha3: 0.05, 
+					alpha4: 0.06, alpha5: 0.05}
+			},
+		    Component bt_navigator {Configuration active.DEFAULT{default_bt_xml_filename: "navigate_w_replanning_and_recovery.xml"}},
+			Component controller_server {Configuration active.DEGRADED{FollowPath.max_vel_x: 0.1, FollowPath.max_speed_xy: 0.1, FollowPath.max_vel_theta: 0.5, FollowPath.transform_tolerance: 2.5}},
+			Component pointcloud_to_laser {Configuration active.DEFAULT{node_name: "pointcloud_to_laser"}},
+			Component laser_resender observable{Configuration unconfigured}
+			Quality[energy: 0.45, performance: 0.2, safety:0.5 ]; 
+			context: Default	
+			
+		};
+		Realization f_performance_mode {
+		    Component amcl {Configuration active.DEFAULT{transform_tolerance: 0.2, alpha1: 0.2, alpha2: 0.2, alpha3: 0.2, alpha4: 0.2, alpha5: 0.2}},
+			Component bt_navigator {Configuration active.SIMPLE{default_bt_xml_filename:"navigate_w_replanning.xml"}},
+			Component controller_server {Configuration active.FAST {FollowPath.max_vel_x: 0.5, FollowPath.max_speed_xy: 0.5, FollowPath.max_vel_theta: 1.5, FollowPath.transform_tolerance: 0.2}},
+			Component pointcloud_to_laser {Configuration inactive},
+			Component laser_resender observable {Configuration active.DEFAULT{node_name: "laser_resender"}}
+			Quality[energy: 0.7, safety:0.5,performance:0.9]; 
+			context: Default	
+			
+		};
+		Realization f_energy_saving_mode {
+			Component amcl {Configuration active.DEFAULT{transform_tolerance: 0.2, alpha1: 0.2, alpha2: 0.2, alpha3: 0.2, alpha4: 0.2, alpha5: 0.2}},
+			Component bt_navigator {Configuration active.LOW_BATTERY{default_bt_xml_filename:"navigate_w_replanning.xml"}},
+			Component controller_server {Configuration active.SLOW {FollowPath.max_vel_x: 0.1, FollowPath.max_speed_xy: 0.1, FollowPath.max_vel_theta: 0.5, FollowPath.transform_tolerance: 0.2}},
+			Component pointcloud_to_laser {Configuration inactive},
+			Component laser_resender observable {Configuration active.DEFAULT{node_name: "laser_resender"}}
+			Quality[energy: 0.34, safety:0.6,performance:0.3]; 
+			context: Default	
+			
+		};
+		
+		Realization f_slow_mode {
+			Component amcl {Configuration active.DEFAULT{transform_tolerance: 0.2, alpha1: 0.2, alpha2: 0.2, alpha3: 0.2, alpha4: 0.2, alpha5: 0.2}},
+			Component bt_navigator {Configuration active.DEFAULT{default_bt_xml_filename: "navigate_w_replanning_and_recovery.xml"}},
+			Component controller_server {Configuration active.SLOW {FollowPath.max_vel_x: 0.1, FollowPath.max_speed_xy: 0.1, FollowPath.max_vel_theta: 0.5, FollowPath.transform_tolerance: 0.2}},
+			Component pointcloud_to_laser {Configuration inactive},
+			Component laser_resender observable {Configuration active.DEFAULT{node_name: "laser_resender"}}
+			Quality[energy: 0.3, safety:0.7,performance:0.4]; 
+			context: Default	
+			
+		};
+	}
+}
+
+
+
+
+	//	Realization f_degraded_wall_mode{
+		//	SystemMode degraded{  //Need information for performance, normal mode and degraded mode;
+		//	Component laser{Configuration offline {laser_offline:4.0}},
+		//	Component wall_sensor{Configuration performan{x:3.0}}, //Laser Configuration,
+		//	Component odometry{Configuration performant{y:4.0}}, //Odometry Configuration
+		//	Component drop_sensor{Configuration performant{z:5.0}}//Drop Sensor
+		//	Quality[safety:3.0,performance:5.0]; 
+		//	context: Default	
+		//} 
+		//};
+//	}
+	
+//	Skill f_coverage {
+//		quality attributes [safety, performance]
+//		input {Area: float}
+//		result{
+//			success: "OK",
+//			error: "InternalError",
+//			inprogress: "IN_PROGRESS"
+//			
+//		}
+//		Realization f_noraml_wall_mode{
+//		//	SystemMode degraded{
+//			Component laser{Configuration offline {laser_offline:4.0}} //Laser Configuration
+//			Quality[safety:4.0,performance:4.0]; 
+//			context: Default	
+//		//}
+//		};
+//	}
+	//Function
+//	Skill f_navigate{
+//		quality attributes [safety, performance, energy] 
+//		//type of input
+//		input{NavigationGoal:float}
+//		//output{ }
+//		result{
+//			success:"OK", 
+//			error:"InternalError",
+//			inprogress: "IN_PROGRESS"
+//			//inprogres: " d"
+//			//Define a Function Status list;
+//			//Function is canceled;
+//			//Success and Error State:
+//			//GenerateComponentsFile for Observation (?)
+//		}
+//		//feedback
+//		//Function Design
+//		Realization Moderate{ 
+//			 //SystemMode MODERATE  //observable components tag
+//			  Component controller_server{Configuration moderate{max_vel_x: 0.2, max_vel_y:0.0, max_vel_theta:0.6}},
+//			  Component bt_navigator{Configuration moderates{bt_xml_filename:1}}
+//			  
+//			  Quality[safety:3.5, performance:5.2]; 
+//			  context: Default	
+//		};
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		//{
+			//Objective
+		//	action NavigateToA (location:20.00)
+			//{ActionType NavigateToPose{goal {poseA:PoseStamped} result {distanceremaining:float} feedback {currentwaypoint:int}}}
+			//Quality[safety:2.7, performance:3.4]
+		//}
+	
+		
+		
+		//}
+//}
+
+
+//provide a maximal example;
+//testcase_instantiate all metamodel clases;
+//2-3 small cases that are minimal a special case;
+//schema checker to be validated: consistency;
+//ontologies to be validated; loaded; providing that the ontology is consistent; 
+
+

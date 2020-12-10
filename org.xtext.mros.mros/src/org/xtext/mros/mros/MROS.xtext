@@ -1,0 +1,195 @@
+grammar org.xtext.mros.mros.MROS with org.eclipse.xtext.common.Terminals
+
+
+
+generate mROS "http://www.xtext.org/mros/mros/MROS"
+
+
+
+Model:
+//	{Model}
+	"SkillDefinitionSet"  
+	'{' SkillDefinitionSet+=SkillDefinition*
+	// ((';' SkillDefinitionSet+=SkillDefinition)*)?
+	//+=SkillDefinition* 
+	//c+=(Component) ((',' c+=Component)*)? 
+	'}';
+	
+	
+
+terminal MESSAGE_ASIGMENT:
+	((ID|STRING)'='(ID|STRING|INT|'-'INT))
+;
+
+SkillDefinition:
+	"Skill" name=ID 
+	'{' 'quality attributes' '[' listqa+=QualityAttribute ((',' listqa+=QualityAttribute)*)? ']' 
+	
+	('input' '{' 
+	 p+=(ParameterType)  ((',' p+=ParameterType)*)? 
+	 '}')*
+	
+	( 'output' '{'
+	  p+=(ParameterType)  ((',' p+=ParameterType)*)? 
+	  '}')*
+	  'result' '{'
+	 
+	      result+=(ResultType)  ((',' result+=ResultType)*)? 
+	    
+	  '}'
+	
+	realizations+=SkillRealization*  '}';
+
+
+ResultType:
+	//status=STATUS
+	SUCCESS | ERROR | INPROGRESS	 
+;
+//STATUS:
+	//'IN_ERROR_NFR' | 'IN_ERROR_COMPONENT' | 'UNREACHABLE' | 'IN_PROGRESS' | 'REACHABLE'
+//;
+
+SUCCESS:
+	'success'  ':'  (value=STRING)? (value=Double)?
+;
+ERROR:
+	'error' ':' (value=STRING)? (value=Double)? 
+;
+
+INPROGRESS:
+	'inprogress' ':' (value=STRING)? (value=Double)? 
+;
+
+//QualityType returns QualityType:
+	//{QualityType}
+//	Safety | Performance | Energyefficiency | Accuracy
+//;
+QualityAttribute:
+	//'name:' name=ID  ',' 'type:' 
+	name=('safety' | 'performance' | 'energy')
+	// QualityType 
+;
+
+//Safety:
+	//'safety'
+//;
+//Performance:
+	//'performance'
+//;
+//Energyefficiency:
+	//'energy'
+//;
+//Accuracy:
+	//'accuracy'
+//;
+
+
+SkillRealization:
+	'Realization' name=ID  '{'  c+=(Component) ((',' c+=Component)*)?  ( 'Quality' '[' q+=QualityModel  ((',' q+=QualityModel)*)?  ']' ';')? context=Context   '}' ';'
+	//('{' a=Action '}' )*
+	//sm=SystemMode
+;
+
+Context:
+	'context:' type=ContextType
+	;
+ContextType:
+	'Default'| 'BatteryCharging' | 'OnChargingStation'
+;
+
+SystemMode:
+	"SystemMode" name=ID '{' c+=(Component) ((',' c+=Component)*)? '}'
+;
+QualityModel:
+	 qa=QualityAttribute ':' qvalue=Double ('<' e=Environment    '>')*
+;
+
+Component:
+	 'Component' name=ID   (observable?='observable')? '{' p+=(Configuration)  ((',' p+=Configuration)*)? '}' 
+;
+
+Configuration:
+	'Configuration'  name=QualifiedMode ('{' (p+=(Parameter))  ((',' p+=Parameter)*)? '}')?
+;
+
+QualifiedMode:
+  Mode ('.' ID)*;
+
+QualifiedName:
+    ID ('.' ID)*;
+
+Mode:
+	'active' | 'inactive' | 'unconfigured' | 'configured'
+;
+
+Environment:
+	'environment' name=ID '{' parameterlist+=EnvironmentParameter ((',' parameterlist+=EnvironmentParameter)*)?
+'}';
+
+
+EnvironmentParameter:
+	Narowness | Clutterness
+;
+
+Narowness:
+	'narowness:' value=Double
+;
+
+Clutterness:
+      'clutterness:' value=Double	
+;
+Parameter:
+	 name=QualifiedName  ':'  (value=STRING)? (value=Double)?
+;
+
+Double:
+   ('-')? INT ('.' INT)?;
+
+
+
+ActionType:
+	'ActionType'
+	name=ID
+	'{'
+		('goal' goal=GoalDefinition)?
+		('result' result=ResultDefinition)?
+		('feedback' feedback=Feedback)?
+	'}';
+
+GoalDefinition:
+	//p=Package t=Type name=ID
+	goal=MessageDefinition
+;
+ResultDefinition:
+	result=MessageDefinition;
+
+Feedback:
+	feedback=MessageDefinition
+;
+
+Action:
+	'action' name=ID "(" i=Parameter ")" '{' at=ActionType  '}' 'Quality' '[' q+=QualityModel  ((',' q+=QualityModel)*)?  ']';
+	
+
+MessageDefinition:
+	'{'
+		( MessagePart+=MessagePart ( ',' MessagePart+=MessagePart)* )?
+	'}';
+	
+MessagePart returns Parameter:
+	//Type = AbstractType
+	//Data = MESSAGE_ASIGMENT
+	p=ParameterType
+;
+
+ParameterType:
+	 name=ID  ':'  value=AbstractType
+;
+
+AbstractType:
+	'bool' | 'int' | 'float' | 'PoseStamped' | 'string' ;
+
+
+KEYWORD returns String: 'goal' | 'message' | 'result' | 'feedback' | 'name' | 'value' | 'service' | 'type' | 'action' | 'duration' | 'time'  ;
+
+

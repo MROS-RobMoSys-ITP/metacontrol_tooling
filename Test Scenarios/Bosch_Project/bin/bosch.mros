@@ -1,0 +1,105 @@
+SkillDefinitionSet{
+		
+	Skill to_navigate {
+		quality attributes [safety, performance, energy]
+		input{Actiongoal: PoseStamped} 
+		result{
+			success: "OK",
+			error: "InternalError",
+			inprogress: "IN_PROGRESS" 
+		}
+		
+		Realization _DEFAULT_mode{
+			Component lidar observable {Configuration active._DEFAULT_mode{lidar_fallback: 0, target_speed: 0.15, target_distance_to_wall: 0.07}},
+			Component wall_sensor observable {Configuration active._DEFAULT_mode{mode: "default"}},
+			Component odometry observable {Configuration active._Default_mode{mode: "default"}},
+			Component drop_sensor observable {Configuration active._Default_mode{mode: "default"}}
+			context: Default	
+			
+		};
+		Realization f_normal_mode {
+			Component lidar observable {Configuration active._DEFAULT_mode{lidar_fallback: 0, target_speed: 0.15, target_distance_to_wall: 0.07}},
+			Component wall_sensor observable {Configuration active._DEFAULT_mode{mode: "default"}},
+			Component odometry observable {Configuration active._Default_mode{mode: "default"}},
+			Component drop_sensor observable {Configuration active._Default_mode{mode: "default"}}
+			context: Default	
+			
+		};
+		Realization f_degraded_mode {
+			Component lidar observable {Configuration active._DEFAULT_mode{lidar_fallback: 1, target_speed: 0.15, target_distance_to_wall: 0.07}},
+			Component wall_sensor observable {Configuration unconfigured},
+			Component odometry observable {Configuration active._Default_mode{mode: "default"}},
+			Component drop_sensor observable {Configuration active._Default_mode{mode: "default"}}
+			context: Default	
+		};
+	}
+	
+	Skill follow_wall {
+		quality attributes [safety, performance]
+		input{DistanceToGoal: float} 
+		result{
+			success: "OK",
+			error: "InternalError",
+			inprogress: "IN_PROGRESS" 
+		}
+		
+		Realization _DEFAULT_mode{
+			Component lidar observable {Configuration active._DEFAULT_mode{lidar_fallback: 0, target_speed: 0.15, target_distance_to_wall: 0.07}},
+			Component wall_sensor observable {Configuration active._DEFAULT_mode{mode: "default"}},
+			Component odometry observable {Configuration active._Default_mode{mode: "default"}},
+			Component drop_sensor observable {Configuration active._Default_mode{mode: "default"}}
+			context: Default	
+			
+		};
+		Realization f_normal_mode {
+			Component lidar observable {Configuration active._DEFAULT_mode{lidar_fallback: 0, target_speed: 0.15, target_distance_to_wall: 0.07}},
+			Component wall_sensor observable {Configuration active._DEFAULT_mode{mode: "default"}},
+			Component odometry observable {Configuration active._Default_mode{mode: "default"}},
+			Component drop_sensor observable {Configuration active._Default_mode{mode: "default"}}
+			context: Default	
+		};
+		
+		Realization f_degraded_mode {
+			Component lidar observable {Configuration active._DEFAULT_mode{lidar_fallback: 1, target_speed: 0.15, target_distance_to_wall: 0.07}},
+			Component wall_sensor observable {Configuration unconfigured},
+			Component odometry observable {Configuration active._Default_mode{mode: "default"}},
+			Component drop_sensor observable {Configuration active._Default_mode{mode: "default"}}
+			context: Default			
+		};
+	}
+		
+	Skill cover_area {
+		quality attributes [safety, performance]
+		input{AreaSize: float} 
+		result{
+			success: "OK",
+			error: "InternalError",
+			inprogress: "IN_PROGRESS" 
+		}
+		
+		Realization _DEFAULT_mode{
+			Component lidar observable {Configuration active._DEFAULT_mode{lidar_fallback: 0, target_speed: 0.15, target_distance_to_wall: 0.07}},
+			Component wall_sensor observable {Configuration active._DEFAULT_mode{mode: "default"}},
+			Component odometry observable {Configuration active._Default_mode{mode: "default"}},
+			Component drop_sensor observable {Configuration active._Default_mode{mode: "default"}}
+			context: Default	
+			
+		};
+		Realization f_normal_mode {
+			Component lidar observable {Configuration active._DEFAULT_mode{lidar_fallback: 0, target_speed: 0.15, target_distance_to_wall: 0.07}},
+			Component wall_sensor observable {Configuration active._DEFAULT_mode{mode: "default"}},
+			Component odometry observable {Configuration active._Default_mode{mode: "default"}},
+			Component drop_sensor observable {Configuration active._Default_mode{mode: "default"}}
+			context: Default	
+			
+		};
+		
+		Realization f_degraded_mode {
+			Component lidar observable {Configuration active._DEFAULT_mode{lidar_fallback: 1, target_speed: 0.15, target_distance_to_wall: 0.07}},
+			Component wall_sensor observable {Configuration unconfigured},
+			Component odometry observable {Configuration active._Default_mode{mode: "default"}},
+			Component drop_sensor observable {Configuration active._Default_mode{mode: "default"}}
+			context: Default		
+		};
+	}
+}

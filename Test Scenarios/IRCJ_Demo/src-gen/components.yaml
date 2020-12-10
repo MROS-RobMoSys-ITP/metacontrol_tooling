@@ -1,0 +1,7 @@
+---
+
+modes_observer:
+  ros__parameters:
+    components:
+   laser_resender
+    

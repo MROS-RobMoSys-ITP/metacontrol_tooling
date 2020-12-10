@@ -1,0 +1,10 @@
+---
+
+modes_observer:
+  ros__parameters:
+    components:
+   lidar
+   wall_sensor
+   odometry
+   drop_sensor
+    
