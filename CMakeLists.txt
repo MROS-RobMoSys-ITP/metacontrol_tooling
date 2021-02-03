@@ -6,8 +6,7 @@ set(CMAKE_BUILD_TYPE DEBUG)
 
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
-find_package(rclcpp_action REQUIRED)
-find_package(nav2_msgs REQUIRED)
+find_package(sensor_msgs REQUIRED)
 
 include_directories(
   include
@@ -15,12 +14,11 @@ include_directories(
 
 set(dependencies
     rclcpp
-    rclcpp_action
-    nav2_msgs
+    sensor_msgs
 )
 
-add_executable(nav_action_proxy_node src/nav_action_proxy_node.cpp)
-ament_target_dependencies(nav_action_proxy_node ${dependencies})
+add_executable(reconfig_time_meter_node src/reconfig_time_meter.cpp)
+ament_target_dependencies(reconfig_time_meter_node ${dependencies})
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
@@ -29,7 +27,7 @@ if(BUILD_TESTING)
 endif()
 
 install(TARGETS
-  nav_action_proxy_node
+  reconfig_time_meter_node
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION lib/${PROJECT_NAME}
